@@ -30,6 +30,7 @@ import java.util.function.UnaryOperator;
 class GatherReplacementsVisitor extends PsiRecursiveElementVisitor {
     private final NamesAndDocsDatabase namesAndDocs;
     private final boolean enableJavadoc;
+    private final boolean rename;
     @Nullable
     private final UnaryOperator<String> conflictResolver;
     private final Replacements replacements;
@@ -42,10 +43,12 @@ class GatherReplacementsVisitor extends PsiRecursiveElementVisitor {
 
     public GatherReplacementsVisitor(NamesAndDocsDatabase namesAndDocs,
                                      boolean enableJavadoc,
+                                     boolean rename,
                                      @Nullable UnaryOperator<String> conflictResolver,
                                      Replacements replacements) {
         this.namesAndDocs = namesAndDocs;
         this.enableJavadoc = enableJavadoc;
+        this.rename = rename;
         this.conflictResolver = conflictResolver;
         this.replacements = replacements;
     }
@@ -132,20 +135,24 @@ class GatherReplacementsVisitor extends PsiRecursiveElementVisitor {
                     // Optionally replace the parameter name, but skip record constructors, since those could have
                     // implications for the field names.
                     if (paramData != null && paramData.getName() != null && !PsiHelper.isRecordConstructor(psiMethod)) {
-                        var paramName = namer.apply(paramData.getName());
+                        if (rename) {
+                            var paramName = namer.apply(paramData.getName());
 
-                        // Replace parameters within the method body
-                        activeParameters.put(psiParameter, paramName);
+                            // Replace parameters within the method body
+                            activeParameters.put(psiParameter, paramName);
 
-                        // Find and replace the parameter identifier
-                        replacements.replace(psiParameter.getNameIdentifier(), paramName);
+                            // Find and replace the parameter identifier
+                            replacements.replace(psiParameter.getNameIdentifier(), paramName);
 
-                        // Record the replacement for remapping existing Javadoc @param tags
-                        renamedParameters.put(psiParameter.getName(), paramName);
+                            // Record the replacement for remapping existing Javadoc @param tags
+                            renamedParameters.put(psiParameter.getName(), paramName);
 
-                        hadReplacements = true;
+                            hadReplacements = true;
 
-                        parameterOrder.add(paramName);
+                            parameterOrder.add(paramName);
+                        } else {
+                            parameterOrder.add(psiParameter.getName());
+                        }
                     } else {
                         parameterOrder.add(psiParameter.getName());
                     }
@@ -185,10 +192,12 @@ class GatherReplacementsVisitor extends PsiRecursiveElementVisitor {
                 }
             }
         } else if (element instanceof PsiReferenceExpression refExpr && refExpr.getReferenceNameElement() != null) {
-            for (var entry : activeParameters.entrySet()) {
-                if (refExpr.isReferenceTo(entry.getKey())) {
-                    replacements.replace(refExpr.getReferenceNameElement(), entry.getValue());
-                    break;
+            if (rename) {
+                for (var entry : activeParameters.entrySet()) {
+                    if (refExpr.isReferenceTo(entry.getKey())) {
+                        replacements.replace(refExpr.getReferenceNameElement(), entry.getValue());
+                        break;
+                    }
                 }
             }
         }
