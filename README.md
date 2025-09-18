@@ -102,7 +102,8 @@ Plugin - parchment
       --parchment-mappings=<mappingsPath>
                            The location of the Parchment mappings file
       --rename
-                           Whether Parchment renames should be applied, when set to false only javadocs are applied
+                           Whether Parchment renames should be applied,
+                              when set to false only javadocs are applied
 Plugin - accesstransformers
       --access-transformer=<atFiles>
 
