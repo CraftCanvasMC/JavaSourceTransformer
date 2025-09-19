@@ -27,8 +27,8 @@ public class ParchmentTransformer implements SourceTransformer {
     public boolean enableJavadoc = true;
 
     @CommandLine.Option(
-            names = "--rename",
-            description = "Whether Parchment renames should be applied",
+            names = "--apply-parchment-renames",
+            description = "Whether Parchment renames should be applied, when disabled only javadocs are applied, given they are enabled",
             negatable = true,
             fallbackValue = "true"
     )

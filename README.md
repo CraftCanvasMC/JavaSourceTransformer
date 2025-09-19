@@ -60,7 +60,7 @@ Usage: jst [-hV] [--in-format=<inputFormat>] [--libraries-list=<librariesList>]
            [--max-queue-depth=<maxQueueDepth>] [--out-format=<outputFormat>]
            [--classpath=<addToClasspath>]... [--ignore-prefix=<ignoredPrefixes>]...
            [--enable-parchment --parchment-mappings=<mappingsPath> [--[no-]parchment-javadoc]
-           [--parchment-conflict-prefix=<conflictPrefix>] [--rename]] [--enable-accesstransformers
+           [--parchment-conflict-prefix=<conflictPrefix>] [--[no-]apply-parchment-renames]] [--enable-accesstransformers
            --access-transformer=<atFiles> [--access-transformer=<atFiles>]...
            [--access-transformer-validation=<validation>]] [--enable-interface-injection
            [--interface-injection-stubs=<stubOut>]
@@ -101,9 +101,9 @@ Plugin - parchment
                            Whether Parchment javadocs should be applied
       --parchment-mappings=<mappingsPath>
                            The location of the Parchment mappings file
-      --rename
+      --[no-]apply-parchment-renames
                            Whether Parchment renames should be applied,
-                              when set to false only javadocs are applied
+                             when disabled only javadocs are applied, given they are enabled
 Plugin - accesstransformers
       --access-transformer=<atFiles>
 
