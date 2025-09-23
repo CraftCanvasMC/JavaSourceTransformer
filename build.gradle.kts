@@ -13,14 +13,9 @@ tasks.jar {
 
 publishing {
     repositories {
-        val url = if (project.version.toString().endsWith("-SNAPSHOT")) {
-            "https://repo.papermc.io/repository/maven-snapshots/"
-        } else {
-            "https://repo.papermc.io/repository/maven-releases/"
-        }
-        maven(url) {
-            credentials(PasswordCredentials::class)
-            name = "paper"
+        maven {
+            name = "canvasmc"
+            url = uri("https://maven.canvasmc.io/snapshots")
         }
     }
 

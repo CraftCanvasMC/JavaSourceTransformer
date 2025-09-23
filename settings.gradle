@@ -1,6 +1,10 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        maven {
+            name = "canvasmc"
+            url = uri("https://maven.canvasmc.io/snapshots")
+        }
     }
     plugins {
         id 'com.github.johnrengelman.shadow' version '8.1.1'
