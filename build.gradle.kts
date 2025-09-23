@@ -13,9 +13,12 @@ tasks.jar {
 
 publishing {
     repositories {
-        maven {
+        maven("https://maven.canvasmc.io/snapshots") {
             name = "canvasmc"
-            url = uri("https://maven.canvasmc.io/snapshots")
+            credentials {
+                username=System.getenv("PUBLISH_USER")
+                password=System.getenv("PUBLISH_TOKEN")
+            }
         }
     }
 
